@@ -236,9 +236,10 @@
                     Following signs for "Advanced Applied Physics," you find a reinforced door, slightly ajar. Inside, a hidden lab, powered by jury-rigged generators, reveals a chaotic mix of human ingenuity. On a central workbench sits the sonic device prototype – powerful, but incomplete.
                 </p>
                 <h3 class="text-xl font-semibold mb-2" style="color: #9a80d0; font-family: 'Cinzel', serif;">Audio Log: Voss's Hope</h3>
-                <div class="log-text">
+                <button id="playVossLog1Button" class="action-button play-log-button">Play Audio Log</button>
+                <!-- <div class="log-text">
                     "If you're hearing this... then I didn't make it. But the device... it might be our only hope. They resonate with life itself... their energy, their ships... it's all tied to a bio-frequency. A fundamental vibration. If I can just create a counter-resonance... a focused sonic pulse... I could disrupt them. Shatter them. But the power required... the specific components... I had to scatter them when the evacuation order came. They were too valuable to risk in one place."
-                </div>
+                </div> -->
                 <button id="revealNotesButton" class="action-button">Examine Voss's Notes</button>
             </div>
         </section>
@@ -298,9 +299,10 @@
                     With both components secured, you return to the lab and install them into the sonic device. As the final connection is made, another audio log from Voss triggers.
                 </p>
                 <h3 class="text-xl font-semibold mb-2" style="color: #9a80d0; font-family: 'Cinzel', serif;">Audio Log: Voss's Dilemma & Warning</h3>
-                <div class="log-text">
+                <button id="playVossLog2Button" class="action-button play-log-button">Play Audio Log</button>
+                <!-- <div class="log-text">
                     "It's ready... almost. (He sounds exhausted, his voice strained). The core is stable, the emitters are aligned. But the instability... the sheer power... if the frequency isn't precise, if the energy cascade isn't perfectly controlled... it could be catastrophic. It might not just disrupt them; it could shatter the local ecosystem... maybe even us. Is saving ourselves worth that price? I don't know. I just... I hope whoever finds this makes the right choice. One last thing... their primary landing zone, the one that caused the most devastation... Parking Lot 14. Their energy signature is strongest there. If you're going to use this, or if you're looking for... answers... or even a way to communicate... that's where their presence is most concentrated. Be careful. That place is... wrong."
-                </div>
+                </div> -->
                 <p class="mt-6 text-lg">
                     Dr. Voss's final words present the core ethical dilemma of the weapon and a crucial piece of intel. The device is now potentially functional.
                     The path to <strong style="color: #f87171; font-family: 'Cinzel Decorative', cursive;">Parking Lot 14</strong>, the alien landing site Voss mentioned, now beckons.
@@ -322,6 +324,12 @@
         const miniGameArea = document.getElementById('miniGameArea');
         const proceedToAssemblyButton = document.getElementById('proceedToAssemblyButton');
         const finalComponentSection = document.getElementById('final-component');
+
+        // audio buttons
+        const playVossLog1Button = document.getElementById('playVossLog1Button');
+        const playVossLog2Button = document.getElementById('playVossLog2Button');
+        var log1 = new Audio('checkpoint5_1_edited.mp3');
+        var log2 = new Audio('checkpoint5_2_edited.mp3');
 
         // Mini-game elements
         const reroutePowerButton = document.getElementById('reroutePowerButton');
@@ -359,6 +367,29 @@
             showSection(componentHuntSection);
             revealNotesButton.disabled = true;
             revealNotesButton.textContent = "Notes Examined...";
+        });
+
+        // audio play
+        playVossLog1Button.addEventListener('click', () => {
+            if (log1.paused) {
+                log1.play();
+                playVossLog1Button.textContent = "Audio Playing...";
+            } else {
+                log1.pause();
+                playVossLog1Button.textContent = "Play Audio";
+            }
+            // playVossLog1Button.disabled = true;
+        });
+
+        playVossLog2Button.addEventListener('click', () => {
+            if (log2.paused) {
+                log2.play();
+                playVossLog2Button.textContent = "Audio Playing...";
+            } else {
+                log2.pause();
+                playVossLog2Button.textContent = "Play Audio";
+            }
+            // playVossLog2Button.disabled = true;
         });
 
         // Power Converter Mini-Game Logic
