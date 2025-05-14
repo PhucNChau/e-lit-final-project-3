@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoes of the Fall - Checkpoint 5: Business & Science Building</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400;700&family=IM+Fell+DW+Pica:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IM Fell DW Pica', serif;
+            background-color: #0a0a0f;
+            color: #a0a0b0;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #050508;
+            border-bottom: 1px solid #2a2a3e;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+        header h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            color: #7858A8;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 3px #000, 0 0 10px rgba(138, 43, 226, 0.25);
+            margin: 0;
+        }
+        header p.subtitle {
+            font-family: 'Cinzel', serif;
+            color: #8a70c0;
+            font-size: 1.3em;
+            margin-top: 0.25rem;
+        }
+        .container {
+            max-width: 1000px !important;
+        }
+        .content-section {
+            padding-top: 2rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hidden-initially { /* For sections initially hidden */
+            display: none;
+            opacity: 0; /* Start with opacity 0 for transition */
+        }
+        .card {
+            background-color: #12121a;
+            border: 1px solid #2a2a3e;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+        .card-title {
+            font-family: 'Cinzel', serif;
+            color: #8a70c0;
+            border-bottom: 1px dashed #4a4a6e;
+            padding-bottom: 10px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.75rem;
+        }
+        .card p, .card ul {
+            line-height: 1.8;
+            color: #b0b0c0;
+            font-size: 1.1rem;
+        }
+        .card ul { padding-left: 1.5rem; }
+        .card ul li { margin-bottom: 0.5rem; }
+
+        .log-text, .note-text {
+            font-family: 'IM Fell DW Pica', serif;
+            background-color: #1a1a24;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            border-left: 4px solid #7858A8;
+            white-space: pre-wrap; 
+            color: #c0b0d8;
+            margin-top: 0.75rem;
+            font-size: 1.05rem;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+        .blueprint-note {
+            background-color: #1a1a24;
+            border: 1px dashed #4a4a6e;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            border-radius: 0.25rem;
+        }
+        .blueprint-note .italic {
+            color: #8a70c0;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .puzzle-hint { /* Kept for potential future use, not directly in mini-game design */
+            background-color: #302040;
+            color: #c0b0d8;
+            padding: 0.75rem 1rem;
+            border-left: 4px solid #503070;
+            border-radius: 0.25rem;
+            margin-top: 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1.05rem;
+        }
+        .puzzle-hint strong { color: #d8c0f8; }
+
+        .action-button {
+            background-color: #503070; /* Darker purple button from cc.html */
+            color: #d0c0e8;
+            padding: 12px 25px;
+            border: 1px solid #604080;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            display: block;
+            margin: 20px auto;
+            font-family: 'Cinzel', serif;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 0 5px rgba(255,255,255,0.1);
+        }
+        .action-button:hover {
+            background-color: #604080;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.6), inset 0 0 8px rgba(255,255,255,0.15);
+        }
+        .action-button:disabled {
+            background-color: #201030;
+            color: #706080;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: translateY(0);
+        }
+
+        /* Mini-game specific styles */
+        .mini-game-area {
+            border: 2px solid #7858A8;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            background-color: #1a1a24;
+        }
+        .component-task {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed #4a4a6e;
+        }
+        .component-task:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .component-task h4 {
+            font-family: 'Cinzel', serif;
+            color: #9a80d0;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+        .component-status {
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+        .status-collected { color: #5eead4; /* Teal for collected */ }
+        .status-pending { color: #fde047; /* Yellow for pending */ }
+        .mini-game-button {
+            background-color: #403050;
+            color: #c0b0d8;
+            padding: 8px 15px;
+            border: 1px solid #503070;
+            border-radius: 4px;
+            font-size: 0.95em;
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+        .mini-game-button:hover { background-color: #503070; }
+        .mini-game-button:disabled {
+             background-color: #201030; color: #706080; cursor: not-allowed;
+        }
+        input[type="text"].code-input {
+            background-color: #0a0a0f;
+            border: 1px solid #4a4a6e;
+            color: #d0c0e8;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: 'Monospace', monospace; /* Different font for code input */
+            margin-right: 10px;
+        }
+
+        footer {
+            font-size: 0.9em;
+            color: #5a5a7e;
+            border-top: 1px solid #2a2a3e;
+            padding: 20px;
+            text-align: center;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 text-center">
+            <h1>Checkpoint 5</h1>
+            <p class="subtitle">Business & Science Building</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+
+        <section id="overview" class="content-section">
+            <div class="card">
+                <h2 class="card-title">Checkpoint Overview</h2>
+                <p>
+                    The Business & Science Building stands as a grim testament to a battle lost, its structure heavily damaged. Inactive alien drones litter the corridors, a palpable sense of failed defence hanging in the air alongside a faint, residual energy hum.
+                </p>
+                <p class="mt-3">
+                    Your objective is to navigate past deactivated security, locate Dr. Voss's hidden lab, and understand the sonic device prototype within. You'll need to find its missing components by deciphering Voss's notes and solving environmental challenges, ultimately facing an ethical dilemma presented by the weapon's creator.
+                </p>
+                <button id="revealLabButton" class="action-button">Search for Dr. Voss's Lab</button>
+            </div>
+        </section>
+
+        <section id="voss-lab" class="content-section hidden-initially">
+            <div class="card">
+                <h2 class="card-title">Dr. Voss's Hidden Lab</h2>
+                <p class="mb-4">
+                    Following signs for "Advanced Applied Physics," you find a reinforced door, slightly ajar. Inside, a hidden lab, powered by jury-rigged generators, reveals a chaotic mix of human ingenuity. On a central workbench sits the sonic device prototype – powerful, but incomplete.
+                </p>
+                <h3 class="text-xl font-semibold mb-2" style="color: #9a80d0; font-family: 'Cinzel', serif;">Audio Log: Voss's Hope</h3>
+                <div class="log-text">
+                    "If you're hearing this... then I didn't make it. But the device... it might be our only hope. They resonate with life itself... their energy, their ships... it's all tied to a bio-frequency. A fundamental vibration. If I can just create a counter-resonance... a focused sonic pulse... I could disrupt them. Shatter them. But the power required... the specific components... I had to scatter them when the evacuation order came. They were too valuable to risk in one place."
+                </div>
+                <button id="revealNotesButton" class="action-button">Examine Voss's Notes</button>
+            </div>
+        </section>
+
+        <section id="component-hunt" class="content-section hidden-initially">
+            <div class="card">
+                <h2 class="card-title">The Component Hunt: Voss's Notes</h2>
+                <p class="mb-4">
+                    Dr. Voss's schematics and notes, pinned to a large whiteboard, guide your search for the missing high-capacity power converter and specialized resonance amplifier.
+                </p>
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-2" style="color: #9a80d0; font-family: 'Cinzel', serif;">Clue: Power Converter</h3>
+                    <div class="blueprint-note">
+                        <p class="italic">From annotated building blueprint (Basement Level):</p>
+                        <p class="note-text mt-2">
+"The big Power Converter needs a safe, shielded spot. I put it in the shielded vault right next to the main server room. Check the emergency power lines there – it might still have some juice."
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2" style="color: #9a80d0; font-family: 'Cinzel', serif;">Clue: Resonance Amplifier</h3>
+                     <div class="blueprint-note">
+                        <p class="italic">From research log entry:</p>
+                        <p class="note-text mt-2">
+"The special crystal for the Amplifier is in Optics Lab B, in storage unit 7-Delta. Be super careful with it, it breaks easily! The code for the secure lock is tied to 'Project Chimera' – use sequence 3.7.1."
+                        </p>
+                    </div>
+                </div>
+
+                <div id="miniGameArea" class="mini-game-area">
+                    <h3 class="text-2xl font-semibold mb-4 text-center" style="color: #8a70c0; font-family: 'Cinzel', serif;">Component Acquisition</h3>
+                    
+                    <div class="component-task">
+                        <h4>Power Converter <span id="converterStatus" class="component-status status-pending">(Pending)</span></h4>
+                        <p class="text-sm text-gray-400">Location: Shielded vault, Basement Server Room.</p>
+                        <button id="reroutePowerButton" class="mini-game-button">1. Reroute Power</button>
+                        <button id="openVaultButton" class="mini-game-button" disabled>2. Open Vault</button>
+                        <p id="converterFeedback" class="text-sm mt-2"></p>
+                    </div>
+
+                    <div class="component-task">
+                        <h4>Resonance Amplifier <span id="amplifierStatus" class="component-status status-pending">(Pending)</span></h4>
+                        <p class="text-sm text-gray-400">Location: Optics Lab B, Storage 7-Delta. Code: 3.7.1</p>
+                        <input type="text" id="amplifierCode" class="code-input" placeholder="Enter Code (X.X.X)">
+                        <button id="submitAmplifierCodeButton" class="mini-game-button">Submit Code</button>
+                        <p id="amplifierFeedback" class="text-sm mt-2"></p>
+                    </div>
+                </div>
+                <button id="proceedToAssemblyButton" class="action-button hidden-initially">Proceed with Weapon Assembly</button>
+            </div>
+        </section>
+
+        <section id="final-component" class="content-section hidden-initially">
+            <div class="card">
+                <h2 class="card-title">The Final Piece</h2>
+                <p class="mb-4">
+                    With both components secured, you return to the lab and install them into the sonic device. As the final connection is made, another audio log from Voss triggers.
+                </p>
+                <h3 class="text-xl font-semibold mb-2" style="color: #9a80d0; font-family: 'Cinzel', serif;">Audio Log: Voss's Dilemma & Warning</h3>
+                <div class="log-text">
+                    "It's ready... almost. (He sounds exhausted, his voice strained). The core is stable, the emitters are aligned. But the instability... the sheer power... if the frequency isn't precise, if the energy cascade isn't perfectly controlled... it could be catastrophic. It might not just disrupt them; it could shatter the local ecosystem... maybe even us. Is saving ourselves worth that price? I don't know. I just... I hope whoever finds this makes the right choice. One last thing... their primary landing zone, the one that caused the most devastation... Parking Lot 14. Their energy signature is strongest there. If you're going to use this, or if you're looking for... answers... or even a way to communicate... that's where their presence is most concentrated. Be careful. That place is... wrong."
+                </div>
+                <p class="mt-6 text-lg">
+                    Dr. Voss's final words present the core ethical dilemma of the weapon and a crucial piece of intel. The device is now potentially functional.
+                    The path to <strong style="color: #f87171; font-family: 'Cinzel Decorative', cursive;">Parking Lot 14</strong>, the alien landing site Voss mentioned, now beckons.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        Extinction Protocol
+    </footer>
+
+    <script>
+        const revealLabButton = document.getElementById('revealLabButton');
+        const vossLabSection = document.getElementById('voss-lab');
+        const revealNotesButton = document.getElementById('revealNotesButton');
+        const componentHuntSection = document.getElementById('component-hunt');
+        const miniGameArea = document.getElementById('miniGameArea');
+        const proceedToAssemblyButton = document.getElementById('proceedToAssemblyButton');
+        const finalComponentSection = document.getElementById('final-component');
+
+        // Mini-game elements
+        const reroutePowerButton = document.getElementById('reroutePowerButton');
+        const openVaultButton = document.getElementById('openVaultButton');
+        const converterStatus = document.getElementById('converterStatus');
+        const converterFeedback = document.getElementById('converterFeedback');
+
+        const amplifierCodeInput = document.getElementById('amplifierCode');
+        const submitAmplifierCodeButton = document.getElementById('submitAmplifierCodeButton');
+        const amplifierStatus = document.getElementById('amplifierStatus');
+        const amplifierFeedback = document.getElementById('amplifierFeedback');
+
+        let powerRerouted = false;
+        let converterCollected = false;
+        let amplifierCollected = false;
+
+        // Function to smoothly show a section
+        function showSection(sectionElement) {
+            sectionElement.style.display = 'block';
+            // Trigger reflow to ensure transition takes effect
+            sectionElement.getBoundingClientRect(); 
+            sectionElement.classList.remove('hidden-initially');
+            sectionElement.classList.add('visible');
+             // Scroll to the revealed section
+            sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        revealLabButton.addEventListener('click', () => {
+            showSection(vossLabSection);
+            revealLabButton.disabled = true;
+            revealLabButton.textContent = "Lab Searched...";
+        });
+
+        revealNotesButton.addEventListener('click', () => {
+            showSection(componentHuntSection);
+            revealNotesButton.disabled = true;
+            revealNotesButton.textContent = "Notes Examined...";
+        });
+
+        // Power Converter Mini-Game Logic
+        reroutePowerButton.addEventListener('click', () => {
+            powerRerouted = true;
+            reroutePowerButton.disabled = true;
+            reroutePowerButton.textContent = "Power Rerouted";
+            openVaultButton.disabled = false;
+            converterFeedback.textContent = "Auxiliary power successfully rerouted to vault controls.";
+            converterFeedback.style.color = "#5eead4";
+        });
+
+        openVaultButton.addEventListener('click', () => {
+            if (powerRerouted) {
+                converterCollected = true;
+                openVaultButton.disabled = true;
+                openVaultButton.textContent = "Vault Opened";
+                converterStatus.textContent = "(Collected)";
+                converterStatus.classList.remove('status-pending');
+                converterStatus.classList.add('status-collected');
+                converterFeedback.textContent = "Power Converter retrieved from the shielded vault!";
+                checkAllComponentsCollected();
+            } else {
+                converterFeedback.textContent = "Error: Vault controls have no power. Reroute power first.";
+                converterFeedback.style.color = "#fde047";
+            }
+        });
+
+        // Resonance Amplifier Mini-Game Logic
+        submitAmplifierCodeButton.addEventListener('click', () => {
+            const enteredCode = amplifierCodeInput.value.trim();
+            if (enteredCode === "3.7.1") {
+                amplifierCollected = true;
+                submitAmplifierCodeButton.disabled = true;
+                amplifierCodeInput.disabled = true;
+                amplifierStatus.textContent = "(Collected)";
+                amplifierStatus.classList.remove('status-pending');
+                amplifierStatus.classList.add('status-collected');
+                amplifierFeedback.textContent = "Correct Code! Resonance Amplifier retrieved from Storage 7-Delta.";
+                amplifierFeedback.style.color = "#5eead4";
+                checkAllComponentsCollected();
+            } else {
+                amplifierFeedback.textContent = "Incorrect Code. Access Denied. (Hint: X.X.X format)";
+                amplifierFeedback.style.color = "#fde047";
+                amplifierCodeInput.value = ""; // Clear input
+            }
+        });
+
+        function checkAllComponentsCollected() {
+            if (converterCollected && amplifierCollected) {
+                proceedToAssemblyButton.style.display = 'block'; // Show the button
+                 // Trigger reflow for transition
+                proceedToAssemblyButton.getBoundingClientRect();
+                proceedToAssemblyButton.classList.remove('hidden-initially');
+                proceedToAssemblyButton.classList.add('visible');
+                // Optionally disable mini-game buttons further if needed
+                reroutePowerButton.disabled = true;
+                openVaultButton.disabled = true;
+                submitAmplifierCodeButton.disabled = true;
+                amplifierCodeInput.disabled = true;
+            }
+        }
+
+        proceedToAssemblyButton.addEventListener('click', () => {
+            showSection(finalComponentSection);
+            proceedToAssemblyButton.disabled = true;
+            proceedToAssemblyButton.textContent = "Assembly Complete...";
+        });
+
+
+        // Intersection Observer for initial sections
+        const sections = document.querySelectorAll('.content-section:not(.hidden-initially)');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+
+</body>
+</html>

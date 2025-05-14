@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoes of the Fall - Checkpoint 6: Parking Lot 14</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400;700&family=IM+Fell+DW+Pica:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IM Fell DW Pica', serif;
+            background-color: #0a0a0f;
+            color: #a0a0b0;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #050508;
+            border-bottom: 1px solid #2a2a3e;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+        header h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            color: #7858A8; /* Muted mystic purple */
+            font-size: 2.5em;
+            text-shadow: 1px 1px 3px #000, 0 0 10px rgba(138, 43, 226, 0.25);
+            margin: 0;
+        }
+        header p.subtitle {
+            font-family: 'Cinzel', serif;
+            color: #8a70c0; /* Lighter mystic purple */
+            font-size: 1.3em;
+            margin-top: 0.25rem;
+        }
+        .container {
+            max-width: 1000px !important;
+        }
+        .content-section {
+            padding-top: 2rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .content-section.hidden-initially {
+            display: none;
+            opacity: 0;
+        }
+        .content-section.shown {
+            display: block;
+        }
+        .card {
+            background-color: #12121a;
+            border: 1px solid #2a2a3e;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+        .card-title {
+            font-family: 'Cinzel', serif;
+            color: #8a70c0;
+            border-bottom: 1px dashed #4a4a6e;
+            padding-bottom: 10px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.75rem;
+        }
+        .card p, .card ul {
+            line-height: 1.8;
+            color: #b0b0c0;
+            font-size: 1.1rem;
+        }
+        .card ul { padding-left: 1.5rem; }
+        .card ul li { margin-bottom: 0.5rem; }
+
+        .transmission-text {
+            font-family: 'Monospace', monospace; /* Different font for transmission */
+            background-color: #1a1a24;
+            padding: 1.5rem;
+            border-radius: 0.375rem;
+            border: 2px dashed #ef4444; /* Red dashed border for alert */
+            color: #fca5a5; /* Red-300 for ominous text */
+            margin-top: 1.5rem;
+            font-size: 1.25rem; /* Larger for impact */
+            text-align: center;
+            white-space: pre-wrap;
+            box-shadow: inset 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+        .decoding-text {
+            font-family: 'Monospace', monospace;
+            color: #fde047; /* Yellow for processing */
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .action-button {
+            background-color: #503070;
+            color: #d0c0e8;
+            padding: 12px 25px;
+            border: 1px solid #604080;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            display: block;
+            margin: 20px auto;
+            font-family: 'Cinzel', serif;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 0 5px rgba(255,255,255,0.1);
+        }
+        .action-button:hover {
+            background-color: #604080;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.6), inset 0 0 8px rgba(255,255,255,0.15);
+        }
+        .action-button:disabled {
+            background-color: #201030;
+            color: #706080;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: translateY(0);
+        }
+        .decision-buttons-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 2rem;
+        }
+        .decision-button {
+            padding: 15px 30px; /* Larger buttons for decision */
+            font-size: 1.2em;
+        }
+        .negotiation-button {
+            background-color: #3b82f6; /* Blue for negotiation */
+            border-color: #2563eb;
+        }
+        .negotiation-button:hover {
+            background-color: #2563eb;
+        }
+        .weapon-button {
+            background-color: #ef4444; /* Red for weapon */
+            border-color: #dc2626;
+        }
+        .weapon-button:hover {
+            background-color: #dc2626;
+        }
+
+        footer {
+            font-size: 0.9em;
+            color: #5a5a7e;
+            border-top: 1px solid #2a2a3e;
+            padding: 20px;
+            text-align: center;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 text-center">
+            <h1>Checkpoint 6</h1>
+            <p class="subtitle">Parking Lot 14 - Alien Landing Site</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+
+        <section id="overview_cp6" class="content-section">
+            <div class="card">
+                <h2 class="card-title">Checkpoint Overview</h2>
+                <p>
+                    Parking Lot 14 is a devastated, cratered alien landing site, marked by twisted wreckage and a palpable, strange energy that prickles the skin. The air itself seems to hum with an unnatural resonance.
+                </p>
+                <p class="mt-3">
+                    Your objective is to navigate to the center of this hazardous lot, find a functional Alien Transmission Decoder device amidst the debris, and use it on larger alien communication wreckage to intercept any active signals. The information you uncover will force a critical decision regarding humanity's next move.
+                </p>
+                <button id="scanSignalsButton" class="action-button">Attempt to Decode Alien Signals</button>
+            </div>
+        </section>
+
+        <section id="transmission_cp6" class="content-section hidden-initially">
+            <div class="card">
+                <h2 class="card-title">Alien Transmission Intercepted</h2>
+                <p class="mb-4">
+                    After carefully maneuvering through the wreckage to the lot's epicenter, you locate a surprisingly intact Alien Transmission Decoder. Nearby, a larger segment of a downed alien vessel still emits faint energy signatures from its damaged communication arrays. You connect the decoder...
+                </p>
+                <div id="decodingStatus" class="decoding-text">
+                    DECODING ALIEN TRANSMISSION... PLEASE WAIT...
+                </div>
+                <div id="decodedMessage" class="transmission-text hidden-initially">
+                    </div>
+            </div>
+        </section>
+
+        <section id="decision_cp6" class="content-section hidden-initially">
+            <div class="card">
+                <h2 class="card-title">Critical Decision Point</h2>
+                <p class="mb-4 text-center text-lg">
+                    The alien transmission confirms your worst fears: they are aware of survivors and are actively planning a "second wave." The uneasy quiet was merely a lull. Time is running out. You must now choose your path.
+                </p>
+                <div class="decision-buttons-container">
+                    <button id="negotiationPathButton" class="action-button decision-button negotiation-button">Path 1: Negotiation</button>
+                    <button id="weaponPathButton" class="action-button decision-button weapon-button">Path 2: Weapon</button>
+                </div>
+                <div id="pathChoiceFeedback" class="text-center mt-6 text-lg">
+                    </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        Extinction Protocol
+    </footer>
+
+    <script>
+        const scanSignalsButton = document.getElementById('scanSignalsButton');
+        const transmissionSection = document.getElementById('transmission_cp6');
+        const decodingStatus = document.getElementById('decodingStatus');
+        const decodedMessageDiv = document.getElementById('decodedMessage');
+        const decisionSection = document.getElementById('decision_cp6');
+        const negotiationPathButton = document.getElementById('negotiationPathButton');
+        const weaponPathButton = document.getElementById('weaponPathButton');
+        const pathChoiceFeedback = document.getElementById('pathChoiceFeedback');
+
+        const alienTransmission = "ALERT: HARVEST INCOMPLETE.\nRESIDUAL LIFE SIGNS DETECTED - SECTOR GAMMA-7 (SOL III).\nINITIATE PROTOCOL OMEGA-9.\nPREPARE FOR SECOND WAVE.";
+
+        // Function to smoothly show a section
+        function showSection(sectionElement, delay = 0) {
+            setTimeout(() => {
+                sectionElement.style.display = 'block';
+                sectionElement.getBoundingClientRect(); 
+                sectionElement.classList.remove('hidden-initially');
+                sectionElement.classList.add('visible');
+                sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, delay);
+        }
+
+        scanSignalsButton.addEventListener('click', () => {
+            showSection(transmissionSection);
+            scanSignalsButton.disabled = true;
+            scanSignalsButton.textContent = "Scanning...";
+
+            // Simulate decoding delay
+            setTimeout(() => {
+                decodingStatus.textContent = "TRANSMISSION INTERCEPTED. DECRYPTING...";
+            }, 1500);
+
+            setTimeout(() => {
+                decodingStatus.classList.add('hidden-initially'); // Hide decoding status
+                decodedMessageDiv.textContent = alienTransmission;
+                showSection(decodedMessageDiv); // Show the message itself
+                showSection(decisionSection, 1500); // Show decision section shortly after
+            }, 3000); // Total delay for decoding and showing message
+        });
+
+        negotiationPathButton.addEventListener('click', () => {
+            pathChoiceFeedback.innerHTML = `
+                <p style="color: #60a5fa;">You have chosen the Path of Negotiation.</p>
+                <p class="text-sm mt-2">Your destination: The communications tower at the <strong style="font-family: 'Cinzel Decorative', cursive;">Fine Arts Building</strong>. It's a desperate hope against an overwhelming threat.</p>
+            `;
+            negotiationPathButton.disabled = true;
+            weaponPathButton.disabled = true;
+        });
+
+        weaponPathButton.addEventListener('click', () => {
+            pathChoiceFeedback.innerHTML = `
+                <p style="color: #f87171;">You have chosen the Path of the Weapon.</p>
+                <p class="text-sm mt-2">Your destination: The strategic overlook at <strong style="font-family: 'Cinzel Decorative', cursive;">Cooper Library</strong>. Humanity's last stand may depend on Dr. Voss's dangerous creation.</p>
+            `;
+            negotiationPathButton.disabled = true;
+            weaponPathButton.disabled = true;
+        });
+
+        // Intersection Observer for initial overview section
+        const overviewSection = document.getElementById('overview_cp6');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        if (overviewSection) { // Check if element exists before observing
+            observer.observe(overviewSection);
+        }
+    </script>
+
+</body>
+</html>
